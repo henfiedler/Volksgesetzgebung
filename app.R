@@ -1,7 +1,3 @@
-# Setting up GithUb
-# https://hansenjohnson.org/post/sync-github-repository-with-existing-r-project/
-# (Terminal) git pull origin master --allow-unrelated-histories
-
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
