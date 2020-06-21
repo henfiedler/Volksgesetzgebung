@@ -92,10 +92,9 @@ server <- function(input, output) {
         })
     })
     # Caption wird unter den Plot eingefügt
-    output$caption <- renderText(paste0("Quelle: Mehr Demokratie e.V.", "\n",
-                                 "Disclaimer: Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
-                                 keine Vollständig beanspruchen kan. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
-                                 nehmen wir diese gerne unter [E-Mail-Adresse] entgegen."))
+    output$caption <- renderText("Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
+                                 keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
+                                 nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.")
 }
 
 ## Shiny App starten -----------------------------------------------------
