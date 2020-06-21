@@ -1,35 +1,31 @@
 # Pakete laden ------------------------------------------------------
 library("tidyverse")
 library("readr")
-library("ggplot2")
 library("plotly")
 library("shiny")
-library("rsconnect")
+library("sf")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
-df <- read_csv("VB_VE.csv")
+df <- read_csv("VB_VE.csv") %>%
+    rename(NAME_1 = Bundesland)
 
 # Geodaten für Deutschland (nach Bundesländern)
-ger <- readRDS("gadm36_DEU_1_sf.rds") %>%
-    rename(Bundesland = NAME_1)
+ger <- readRDS("gadm36_DEU_1_sf.rds")
 
 ## Join mit Geodaten -------------------------------------------------
-# Check des Identifiers
-df$Bundesland %in% ger$Bundesland
-
 DF <- ger %>%
-    left_join(df, by = "Bundesland") %>%
-    select(Jahr, Bundesland, Typ, Beschreibung, geometry) %>%
+    left_join(df, by = "NAME_1") %>%
+    select(Jahr, NAME_1, Typ, Beschreibung, geometry) %>%
     mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
 
 ## Shiny App programmieren -------------------------------------------
 # definiere UI für Applikation
 ui <- fluidPage(
-
+    
     # Applikationstitle
     titlePanel("Reformen der Volksgesetzgebung in den Bundesländern"),
-
+    
     # Sidebar mit  einem Slider-Input für Jahre
     sidebarLayout(
         sidebarPanel(
@@ -43,8 +39,8 @@ ui <- fluidPage(
         ),
         # Plot als interaktive Plotly-Grafik anlegen
         mainPanel(
-           plotlyOutput("plot"),
-           textOutput("caption")
+            plotlyOutput("plot"),
+            textOutput("caption")
         )
     )
 )
@@ -58,19 +54,17 @@ server <- function(input, output) {
             DF_year <- DF %>%
                 filter(Jahr == input$years)
             # der eigentliche Plot wird mit ggplot erstellt
-            p <- ggplot(DF) +
-                # Karte an sich mit allen Bundesländern
-                geom_sf(aes(geometry = geometry,
-                            label = Bundesland), lwd = 0.2) +
-                # Einfärben der Bundesländer mit Reformen in einem jeweiligen Jahr
-                ifelse(input$years != DF$Jahr, # mit ifelse-Funktion wird ausgeklammert, wenn es in einem Jahr keine Reformen gab
-                        geom_sf(data = DF, aes(geometry = geometry,
-                                label = Bundesland), lwd = 0.2),
-                        geom_sf(data = DF_year, aes(geometry = geometry,
-                                            fill = Typ,
-                                            text = paste0("Bundesland: ", Bundesland, "\n",
-                                                          Beschreibung)),
-                        lwd = 0.4)) +
+            p <- ggplot(data = DF) +
+                # Deutschlandkarte mit Label für Bundesländer
+                ifelse(input$years != DF$Jahr,
+                       geom_sf(aes(geometry = geometry,
+                                   text = paste0("Bundesland: ", NAME_1)),
+                               lwd = 0.2),
+                       geom_sf(data = DF_year, aes(geometry = geometry,
+                                                   fill = Typ,
+                                                   text = paste0("Bundesland: ", NAME_1, "\n",
+                                                                 Beschreibung)),
+                               lwd = 0.4)) +
                 # Layout-Einstellungen
                 theme_bw() +
                 theme(legend.position = "none")
