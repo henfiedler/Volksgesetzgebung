@@ -1,0 +1,13 @@
+name: Volksgesetzgebung
+title: Volksgesetzgebung
+username:
+account: henfiedler
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2484300
+bundleId: 3297890
+url: https://henfiedler.shinyapps.io/Volksgesetzgebung/
+when: 1592733220.34665
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 2019_10_27_Reformen_DD_kommunal und Landesebene_?bertragungsvorlage zum abhaken.ods|README.md|Script 01.R|Script 02.R|Reformen/app1.R|Reformen/app2.R

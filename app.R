@@ -1,23 +1,10 @@
 # Pakete laden ------------------------------------------------------
-packages <- c("tidyverse",
-              "readr",
-              "ggplot2",
-              "plotly",
-              "shiny")
-
-for (p in packages) {
-    if (p %in% installed.packages()[,1]) {
-        print(paste0(p, ' is installed. Will now load ', p,'.'))
-        library(p, character.only=T)
-    }
-    else {
-        print(paste0(p, ' is NOT installed. Will now install ', p,'.'))
-        install.packages(p)
-        library(p, character.only=T)
-    }
-}
-# Liste löschen
-rm(packages, p)
+library("tidyverse")
+library("readr")
+library("ggplot2")
+library("plotly")
+library("shiny")
+library("rsconnect")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
