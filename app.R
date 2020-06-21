@@ -1,47 +1,91 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# Pakete laden
+packages <- c("tidyverse",
+              "readr",
+              "ggplot2",
+              "plotly",
+              "shiny")
 
-library(shiny)
+for (p in packages) {
+    if (p %in% installed.packages()[,1]) {
+        print(paste0(p, ' is installed. Will now load ', p,'.'))
+        library(p, character.only=T)
+    }
+    else {
+        print(paste0(p, ' is NOT installed. Will now install ', p,'.'))
+        install.packages(p)
+        library(p, character.only=T)
+    }
+}
 
-# Define UI for application that draws a histogram
+rm(packages, p)
+
+
+# Define UI for application
 ui <- fluidPage(
 
     # Application title
     titlePanel("Reformen der Volksgesetzgebung in den Bundesländern"),
 
-    # Sidebar with a slider input for number of bins 
+    # Sidebar with a slider input for years
     sidebarLayout(
         sidebarPanel(
-            sliderInput("Jahre",
-                        "Jahr",
-                        min = 1945,
-                        max = 2020,
-                        value = 1)
+            sliderInput(inputId = "years",
+                        label = "Jahr",
+                        min = min(DF$Jahr),
+                        max = max(DF$Jahr),
+                        value = min(DF$Jahr),
+                        sep = "")
         ),
-
-        # Show a plot of the generated distribution
+        # Show a plot
         mainPanel(
-           plotOutput("GERmap")
+           plotlyOutput("plot")
         )
     )
 )
 
-# Define server logic required to draw a histogram
+# Definiere Server Logik für Map
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$Jahre + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    output$plot <- renderPlotly({
+        
+        ggplotly({
+            
+            df <- read_csv("VB_VE.csv")
+            
+            # Geodaten für Deutschland (nach Bundesländern)
+            ger <- readRDS("gadm36_DEU_1_sf.rds")
+            
+            ## Join mit Geodaten
+            # Check des Identifiers
+            df$NAME_1 %in% ger$NAME_1
+            
+            DF <- ger %>%
+                left_join(df, by = "NAME_1") %>%
+                select(Jahr, NAME_1, Typ, Beschreibung, geometry) %>%
+                rename(Bundesland = NAME_1) %>%
+                mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
+            
+            DF_year <- DF %>%
+                filter(Jahr == input$years)
+            
+            p <- ggplot(DF) +
+                geom_sf(aes(geometry = geometry,
+                            label = Bundesland), lwd = 0.2) +
+                ifelse(input$years != DF$Jahr,
+                        geom_sf(data = DF, aes(geometry = geometry,
+                                label = Bundesland), lwd = 0.2),
+                        geom_sf(data = DF_year, aes(geometry = geometry,
+                                            fill = Typ,
+                                            text = paste0("Bundesland: ", Bundesland, "\n",
+                                                          Beschreibung)),
+                        lwd = 0.4)) +
+                theme_bw() +
+                theme(legend.position = "none") +
+                labs(
+                    x = "",
+                    y = "",
+                    caption = "Source: Mehr Demokratie e.V.")
+            p
+        })
     })
 }
 

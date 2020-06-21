@@ -41,6 +41,22 @@ DF <- df %>%
   rename(Bundesland = NAME_1)
 
 #Plotten
+P <- ggplot(DF) +
+  geom_sf(aes(geometry = geometry,
+              label = Bundesland),
+          lwd = 0.2) +
+  geom_sf(aes(geometry = geometry,
+              frame = Jahr,
+              label = Beschreibung,
+              fill = Typ),
+          lwd = 0.2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(
+    x = "",
+    y = "",
+    title = "Reformen der Volksgesetzgebung in den Bundesländern",
+    caption = "Source: Eigene Recherchen")
 
 p <- ggplot(ger) +
   geom_sf(aes(),
