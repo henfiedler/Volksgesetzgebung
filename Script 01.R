@@ -21,9 +21,11 @@ rm(packages, p)
 ## Laden der Datensätze
 # Reformen
 df <- read_csv("VB_VE.csv")
+str(df)
 
 # Geodaten für Deutschland (nach Bundesländern)
 ger <- readRDS("gadm36_DEU_1_sf.rds")
+str(ger)
 
 ## Join mit Geodaten
 # Check des Identifiers

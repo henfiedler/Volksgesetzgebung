@@ -19,6 +19,23 @@ for (p in packages) {
 
 rm(packages, p)
 
+## Daten laden
+# Reformen der Volksgesetzgebung
+df <- read_csv("VB_VE.csv")
+
+# Geodaten für Deutschland (nach Bundesländern)
+ger <- readRDS("gadm36_DEU_1_sf.rds") %>%
+    rename(Bundesland = NAME_1)
+
+## Join mit Geodaten
+# Check des Identifiers
+df$Bundesland %in% ger$Bundesland
+
+DF <- ger %>%
+    left_join(df, by = "Bundesland") %>%
+    select(Jahr, Bundesland, Typ, Beschreibung, geometry) %>%
+    mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
+
 
 # Define UI for application
 ui <- fluidPage(
@@ -48,21 +65,6 @@ server <- function(input, output) {
     output$plot <- renderPlotly({
         
         ggplotly({
-            
-            df <- read_csv("VB_VE.csv")
-            
-            # Geodaten für Deutschland (nach Bundesländern)
-            ger <- readRDS("gadm36_DEU_1_sf.rds")
-            
-            ## Join mit Geodaten
-            # Check des Identifiers
-            df$NAME_1 %in% ger$NAME_1
-            
-            DF <- ger %>%
-                left_join(df, by = "NAME_1") %>%
-                select(Jahr, NAME_1, Typ, Beschreibung, geometry) %>%
-                rename(Bundesland = NAME_1) %>%
-                mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
             
             DF_year <- DF %>%
                 filter(Jahr == input$years)
