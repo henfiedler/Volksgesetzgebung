@@ -1,4 +1,4 @@
-# Pakete laden
+# Pakete laden ------------------------------------------------------
 packages <- c("tidyverse",
               "readr",
               "ggplot2",
@@ -16,10 +16,10 @@ for (p in packages) {
         library(p, character.only=T)
     }
 }
-
+# Liste löschen
 rm(packages, p)
 
-## Daten laden
+## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
 df <- read_csv("VB_VE.csv")
 
@@ -27,7 +27,7 @@ df <- read_csv("VB_VE.csv")
 ger <- readRDS("gadm36_DEU_1_sf.rds") %>%
     rename(Bundesland = NAME_1)
 
-## Join mit Geodaten
+## Join mit Geodaten -------------------------------------------------
 # Check des Identifiers
 df$Bundesland %in% ger$Bundesland
 
@@ -36,14 +36,14 @@ DF <- ger %>%
     select(Jahr, Bundesland, Typ, Beschreibung, geometry) %>%
     mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
 
-
-# Define UI for application
+## Shiny App programmieren -------------------------------------------
+# definiere UI für Applikation
 ui <- fluidPage(
 
-    # Application title
+    # Applikationstitle
     titlePanel("Reformen der Volksgesetzgebung in den Bundesländern"),
 
-    # Sidebar with a slider input for years
+    # Sidebar mit  einem Slider-Input für Jahre
     sidebarLayout(
         sidebarPanel(
             sliderInput(inputId = "years",
@@ -52,27 +52,31 @@ ui <- fluidPage(
                         max = max(DF$Jahr),
                         value = min(DF$Jahr),
                         sep = "")
+            
         ),
-        # Show a plot
+        # Plot als interaktive Plotly-Grafik anlegen
         mainPanel(
-           plotlyOutput("plot")
+           plotlyOutput("plot"),
+           textOutput("caption")
         )
     )
 )
 
-# Definiere Server Logik für Map
+# Definiere Server Logik für die Umsetzung als Map
 server <- function(input, output) {
     output$plot <- renderPlotly({
-        
+        # Plot wird zu interaktiver plotly-Grafik umgewandelt
         ggplotly({
             
             DF_year <- DF %>%
                 filter(Jahr == input$years)
-            
+            # der eigentliche Plot wird mit ggplot erstellt
             p <- ggplot(DF) +
+                # Karte an sich mit allen Bundesländern
                 geom_sf(aes(geometry = geometry,
                             label = Bundesland), lwd = 0.2) +
-                ifelse(input$years != DF$Jahr,
+                # Einfärben der Bundesländer mit Reformen in einem jeweiligen Jahr
+                ifelse(input$years != DF$Jahr, # mit ifelse-Funktion wird ausgeklammert, wenn es in einem Jahr keine Reformen gab
                         geom_sf(data = DF, aes(geometry = geometry,
                                 label = Bundesland), lwd = 0.2),
                         geom_sf(data = DF_year, aes(geometry = geometry,
@@ -80,16 +84,19 @@ server <- function(input, output) {
                                             text = paste0("Bundesland: ", Bundesland, "\n",
                                                           Beschreibung)),
                         lwd = 0.4)) +
+                # Layout-Einstellungen
                 theme_bw() +
-                theme(legend.position = "none") +
-                labs(
-                    x = "",
-                    y = "",
-                    caption = "Source: Mehr Demokratie e.V.")
+                theme(legend.position = "none")
+            # Plot wird ausgegeben
             p
         })
     })
+    # Caption wird unter den Plot eingefügt
+    output$caption <- renderText(paste0("Quelle: Mehr Demokratie e.V.", "\n",
+                                 "Disclaimer: Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
+                                 keine Vollständig beanspruchen kan. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
+                                 nehmen wir diese gerne unter [E-Mail-Adresse] entgegen."))
 }
 
-# Run the application 
+## Shiny App starten -----------------------------------------------------
 shinyApp(ui = ui, server = server)
