@@ -10,8 +10,7 @@ df <- read_csv("VB_VE.csv")
 ## Plot -------------------------------------------------
 
 df1 <- df %>%
-  group_by(Reform, Jahr, Bundesland, Typ, Beschreibung) %>%
-  summarise(Anzahl = n()) %>%
+  count(Reform, Jahr, Bundesland, Typ, Beschreibung, name = "Anzahl") %>%
   mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
 
 plot1 <- ggplot(df1, aes(x = Jahr, y = Anzahl,
@@ -24,13 +23,19 @@ plot1 <- ggplot(df1, aes(x = Jahr, y = Anzahl,
        x = "Jahre",
        caption = "Quelle: Mehr Demokratie e.V.")
 
-# Liniendiagram
+## Liniendiagram
+# Anzahl Reformen nach Jahren
 df2 <- df %>%
-  group_by(Jahr) %>%
-  summarise(Anzahl = n())
+  add_count(Jahr, name = "Anzahl")
+
+# Anzahl der Reformen nach Jahren und Bundesländern
+df3 <- df %>%
+  add_count(Jahr, Bundesland, name = "Anzahl") %>%
+  mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
 
 ggplot(df2, aes(x = Jahr, y = Anzahl)) +
-  geom_line() +
+  geom_line(color = "red") +
+  geom_line(data = df3, aes(x = Jahr, y = Anzahl, color = Bundesland)) +
   ggtitle("Reformen der Volksgesetzgebung in den Bundesländern") +
   labs(y = "Anzahl Reformen",
        x = "Jahre",
