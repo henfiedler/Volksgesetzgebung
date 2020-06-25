@@ -38,8 +38,19 @@ P <- ggplot(data = DF) +
   labs(
     x = "",
     y = "",
-    title = "Reformen der Volksgesetzgebung in den Bundesländern",
-    caption = "Source: Mehr Demokratie e.V.")
+    title = "Reformen der Volksgesetzgebung in den Bundesländern")
 
-## in interaktive Grafik umwandeln -----------------------------------------------------
-ggplotly(P)
+## Interaktive Grafik -----------------------------------------------------
+# ggplot in plotly umwandeln
+ggplotly(P) %>%
+  # Parameter der Animation spezifizieren
+  animation_opts(frame = 10000, easing = "elastic", redraw = FALSE, mode = "immediate"
+  ) %>%
+  # Caption hinzufügen
+  layout(annotations =
+           list(x = 1, y = -0.1, text = "Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
+                                 keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
+                                 nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
+                showarrow = FALSE, xref = "paper", yref = "paper",
+                xanchor = "right", yanchor = "auto", xshift = 0, yshift = 0,
+                font = list(size = 15, color = "black")))
