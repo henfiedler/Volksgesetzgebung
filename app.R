@@ -11,7 +11,13 @@ df <- read_csv("VB_VE.csv") %>%
     rename(NAME_1 = Bundesland)
 
 # Geodaten für Deutschland (nach Bundesländern)
-ger <- readRDS("gadm36_DEU_1_sf.rds")
+ger <- readRDS("gadm36_DEU_1_sf.rds") %>% 
+    st_transform(3857) %>%
+    # CRS: Mercator
+    # https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf
+    st_simplify(preserveTopology = TRUE, dTolerance = 1000) %>% 
+    st_cast("MULTIPOLYGON")
+
 
 ## Join mit Geodaten -------------------------------------------------
 DF <- ger %>%
