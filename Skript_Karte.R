@@ -5,15 +5,27 @@ library("plotly")
 library("sf")
 
 ## Daten laden ------------------------------------------------------
-# Reformen der Volksgesetzgebung
+# Reformen der Volksgesetzgebung#
+# https://cran.r-project.org/web/packages/GADMTools/GADMTools.pdf
 df <- read_csv("VB_VE.csv") %>%
   rename(NAME_1 = Bundesland)
 
 # Geodaten für Deutschland (nach Bundesländern)
 ger <- readRDS("gadm36_DEU_1_sf.rds")
 
+# https://plotly-r.com/maps.html
+ger_simple <- readRDS("gadm36_DEU_1_sf.rds") %>% 
+  st_transform(3857) %>%
+  # CRS: Mercator
+  # https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf
+  st_simplify(preserveTopology = TRUE, dTolerance = 10000) %>% 
+  st_cast("MULTIPOLYGON")
+
+str(ger_simple)
+object.size(ger_simple)
+
 ## Join mit Geodaten -------------------------------------------------
-DF <- ger %>%
+DF <- ger_simple %>%
   left_join(df, by = "NAME_1") %>%
   select(Jahr, NAME_1, Typ, Beschreibung, geometry) %>%
   mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
@@ -44,13 +56,21 @@ P <- ggplot(data = DF) +
 # ggplot in plotly umwandeln
 ggplotly(P) %>%
   # Parameter der Animation spezifizieren
-  animation_opts(frame = 10000, easing = "elastic", redraw = FALSE, mode = "immediate"
+  animation_opts(frame = 1000, transition = 0, easing = "linear", redraw = FALSE, mode = "immediate"
   ) %>%
   # Caption hinzufügen
   layout(annotations =
-           list(x = 1, y = -0.1, text = "Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
-                                 keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
-                                 nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
-                showarrow = FALSE, xref = "paper", yref = "paper",
-                xanchor = "right", yanchor = "auto", xshift = 0, yshift = 0,
-                font = list(size = 15, color = "black")))
+           list(x = 0,
+                y = -0.1,
+                text = "Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
+                        keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
+                        nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
+                showarrow = FALSE,
+                xref = "paper",
+                yref = "paper",
+                xanchor = "right",
+                yanchor = "auto",
+                xshift = 0,
+                yshift = 0,
+                font = list(size = 14, color = "darkgrey")))
+
