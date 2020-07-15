@@ -47,6 +47,11 @@ P <- ggplot(data = DF) +
   # Layout
   theme_bw() +
   theme(legend.position = "none") +
+  scale_fill_manual(values = c(
+    "Landesverfassung" = "lightblue",
+    "Landesgesetz" = "green",
+    "Gesetzesänderung" = "orange",
+    "Gesetzespaket" = "darkblue")) +
   labs(
     x = "",
     y = "",

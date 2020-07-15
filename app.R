@@ -72,7 +72,12 @@ server <- function(input, output) {
                                lwd = 0.4)) +
                 # Layout-Einstellungen
                 theme_bw() +
-                theme(legend.position = "none")
+                theme(legend.position = "none") +
+                scale_fill_manual(values = c(
+                    "Landesverfassung" = "lightblue",
+                    "Landesgesetz" = "green",
+                    "Gesetzesänderung" = "orange",
+                    "Gesetzespaket" = "darkblue"))
             # Plot wird ausgegeben
             p
         })
@@ -85,3 +90,4 @@ server <- function(input, output) {
 
 ## Shiny App starten -----------------------------------------------------
 shinyApp(ui = ui, server = server)
+
