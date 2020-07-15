@@ -12,8 +12,9 @@ df <- read_csv("VB_VE.csv") %>%
 
 # Geodaten für Deutschland (nach Bundesländern)
 ger <- readRDS("gadm36_DEU_1_sf.rds") %>% 
-    st_transform(3857) %>%
-    st_simplify(preserveTopology = TRUE, dTolerance = 5000) %>% 
+    st_transform(3857) %>% # Mercator-Projektion
+    st_simplify(preserveTopology = TRUE, dTolerance = 5000) %>%
+    # lowering resolution
     st_cast("MULTIPOLYGON")
 
 
