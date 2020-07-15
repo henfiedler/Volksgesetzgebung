@@ -18,7 +18,7 @@ ger_simple <- readRDS("gadm36_DEU_1_sf.rds") %>%
   st_transform(3857) %>%
   # CRS: Mercator
   # https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf
-  st_simplify(preserveTopology = TRUE, dTolerance = 10000) %>% 
+  st_simplify(preserveTopology = TRUE, dTolerance = 1000) %>% 
   st_cast("MULTIPOLYGON")
 
 str(ger_simple)
@@ -56,21 +56,20 @@ P <- ggplot(data = DF) +
 # ggplot in plotly umwandeln
 ggplotly(P) %>%
   # Parameter der Animation spezifizieren
-  animation_opts(frame = 1000, transition = 0, easing = "linear", redraw = FALSE, mode = "immediate"
+  animation_opts(frame = 5000, transition = 0, easing = "linear", redraw = FALSE, mode = "immediate"
   ) %>%
   # Caption hinzufügen
   layout(annotations =
            list(x = 0,
-                y = -0.1,
-                text = "Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
-                        keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende oder korrigierende Hinweise für uns haben,
-                        nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
+                y = -0.07,
+                text = "Quelle: Mehr Demokratie e.V. Stand 2020; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende
+oder korrigierende Hinweise für uns haben, nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
+                align = "left",
                 showarrow = FALSE,
                 xref = "paper",
                 yref = "paper",
-                xanchor = "right",
-                yanchor = "auto",
+                xanchor = "left",
+                yanchor = "top",
                 xshift = 0,
                 yshift = 0,
-                font = list(size = 14, color = "darkgrey")))
-
+                font = list(size = 12, color = "black")))
