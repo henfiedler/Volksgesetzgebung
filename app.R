@@ -7,7 +7,9 @@ library("sf")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
-df <- read_csv("VB_VE.csv") %>%
+df <- read_delim("VB_VE_neu.csv", 
+                 ";", escape_double = FALSE, col_types = cols(Reform = col_date(format = "%Y-%m-%d")), 
+                 trim_ws = TRUE) %>% 
     rename(NAME_1 = Bundesland)
 
 # Geodaten für Deutschland (nach Bundesländern)

@@ -1,13 +1,13 @@
 # Pakete laden ------------------------------------------------------
 library("tidyverse")
-library("readr")
+library("readxl")
 library("plotly")
 library("sf")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung#
 # https://cran.r-project.org/web/packages/GADMTools/GADMTools.pdf
-df <- read_csv("VB_VE.csv") %>%
+df <- read_excel("VB_VE.xlsx") %>%
   rename(NAME_1 = Bundesland)
 
 # Geodaten für Deutschland (nach Bundesländern)

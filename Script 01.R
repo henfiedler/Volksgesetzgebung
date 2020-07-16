@@ -60,15 +60,15 @@ P <- ggplot(DF) +
 
 ggplotly(P)
 
-
-DF %>%
-  plot_ly(color= ~Typ,
-         hoverinfo = ~Beschreibung,
-         hoveron = "fills",
-         frame= ~Jahr) %>%
-         layout(title="Reformen in Deutschland")))
-
-
+## Direkt mit plotly
 style(hoverlabel = list(bgcolor = "white")) %>% 
   animation_slider(currentvalue = list(prefix = "Jahr ")) %>%
   layout(title="Reformen")
+
+
+plot_geo(data = DF,
+         color= ~Typ,
+         hoverinfo = ~Beschreibung,
+         
+         frame= ~Jahr) %>%
+  layout(title="Reformen in Deutschland")
