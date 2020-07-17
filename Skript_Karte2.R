@@ -25,8 +25,21 @@ str(ger_simple)
 object.size(ger_simple)
 
 ## Join mit Geodaten -------------------------------------------------
+# Fehlende Jahre auffüllen
+Jahr <- c(1945:2020)
+years <- tibble(Jahr)
+
+# fehlende Jahre joinen
+DF <- years %>%
+  left_join(df, by = "Jahr")
+
+# ein Bunedesland als Platzhalter einsetzen
+DF <- DF %>%
+  mutate(NAME_1 = replace_na(NAME_1, "Bremen"))
+
+# Geodaten joinen
 DF <- ger_simple %>%
-  left_join(df, by = "NAME_1") %>%
+  left_join(DF, by = "NAME_1") %>% 
   select(Jahr, NAME_1, Typ, Beschreibung, geometry) %>%
   mutate(Beschreibung = str_wrap(Beschreibung, width = 40))
 
@@ -42,14 +55,15 @@ P <- ggplot(data = DF) +
   labs(
     x = "",
     y = "",
-    title = "Reformen der Volksgesetzgebung in den  von 1946 bis 2018")
+    title = "Reformen der Volksgesetzgebung in den Bundesländern von 1946 bis 2018")
 
 ## Interaktive Grafik ------------------------------------------------
 # in plotly-Objekt umwandeln
 ggplotly(P) %>%
   # Hervorhebungen und Infotext der Reformen hinzufügen
   add_sf(color = ~Typ == c("Landesverfassung", "Landesgesetz", "Gesetzesänderung", "Gesetzespaket"),
-         # colors = "lightblue",
+         # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+         colors = "lightskyblue3",
          hoveron = "points",
          text = ~paste0("Bundesland: ", NAME_1, "\n",
                         Beschreibung),
