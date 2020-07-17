@@ -61,14 +61,34 @@ P <- ggplot(DF) +
 ggplotly(P)
 
 ## Direkt mit plotly
-style(hoverlabel = list(bgcolor = "white")) %>% 
-  animation_slider(currentvalue = list(prefix = "Jahr ")) %>%
-  layout(title="Reformen")
-
-
-plot_geo(data = DF,
-         color= ~Typ,
-         hoverinfo = ~Beschreibung,
-         
-         frame= ~Jahr) %>%
-  layout(title="Reformen in Deutschland")
+# https://stackoverflow.com/questions/59637672/r-changing-labels-in-an-animated-map-using-ggplotly-and-geom-sf
+# https://plotly.com/r/filled-area-plots/
+plot_ly(DF) %>% 
+  add_sf(color = ~Typ,
+         text = ~paste0("Bundesland: ", NAME_1, "\n",
+                        Beschreibung),
+         hoverinfo = "text",
+         hoveron = "fills",
+         frame = ~Jahr) %>% 
+  style(hoverlabel = list(bgcolor = "white")) %>% 
+  animation_opts(frame = 5000,
+                 transition = 0,
+                 easing = "linear",
+                 redraw = TRUE,
+                 mode = "immediate") %>%
+  layout(title = "Reformen der Volksgesetzgebung in den Bundesländern",
+         showlegend = FALSE,
+         annotations =
+           list(x = 0,
+                y = -0.07,
+                text = "Quelle: Mehr Demokratie e.V. Stand 2020; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung keine Vollständigkeit beanspruchen kann. Wenn Sie ergänzende
+oder korrigierende Hinweise für uns haben, nehmen wir diese gerne unter [E-Mail-Adresse] entgegen und versuchen sie so schnell wie möglich zu berücksichtigen.",
+                align = "left",
+                showarrow = FALSE,
+                xref = "paper",
+                yref = "paper",
+                xanchor = "left",
+                yanchor = "top",
+                xshift = 0,
+                yshift = 0,
+                font = list(size = 12, color = "black")))

@@ -59,18 +59,19 @@ server <- function(input, output) {
             
             DF_year <- DF %>%
                 filter(Jahr == input$years)
+            
             # der eigentliche Plot wird mit ggplot erstellt
             p <- ggplot(data = DF) +
                 # Deutschlandkarte mit Label für Bundesländer
-                ifelse(input$years != DF$Jahr,
-                       geom_sf(aes(geometry = geometry,
-                                   text = paste0("Bundesland: ", NAME_1)),
-                               lwd = 0.2),
+                ifelse(input$years == DF$Jahr,
                        geom_sf(data = DF_year, aes(geometry = geometry,
-                                                   fill = Typ,
+                                                   fill = as.factor(Typ),
                                                    text = paste0("Bundesland: ", NAME_1, "\n",
                                                                  Beschreibung)),
-                               lwd = 0.4)) +
+                               lwd = 0.4),
+                       geom_sf(aes(geometry = geometry,
+                                   text = paste0("Bundesland: ", NAME_1)),
+                               lwd = 0.2)) +
                 # Layout-Einstellungen
                 theme_bw() +
                 theme(legend.position = "none") +
@@ -81,7 +82,7 @@ server <- function(input, output) {
                     "Gesetzespaket" = "darkblue"))
             # Plot wird ausgegeben
             p
-        })
+        }, tooltip = "text")
     })
     # Caption wird unter den Plot eingefügt
     output$caption <- renderText("Quelle: Mehr Demokratie e.V.; Wir möchten darauf hinweisen, dass diese Übersicht trotz sorgfältiger Prüfung
