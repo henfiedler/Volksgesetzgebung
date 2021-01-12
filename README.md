@@ -1,6 +1,10 @@
 # Reformen der Volksgesetzgebung in den Bundesländern
 
-Volksabstimmungen stellen eine Form von direkter Demokratie dar, über die Initiativen direkt aus der engagierten Zivilgesellschaft in den Gesetzgebungsprozess eingebracht werden können. Volksabstimmungen sind mittlerweile in allen Bundesländern Deutschlands gesetzlich geregelt und in vielen davon bewährte Praxis. Die Details des Verfahrens werden auf der Ebene der Bundesländer durch Ausführungsgesetze geregelt. Insbesondere hinsichtlich der Unterschriftenhürden und Quoren variieren die Regelungen von Bundesland zu Bundesland stark. Auch sind die Begrifflichkeiten für die Verfahrensstufen nicht immer einheitlich. Es hat sich aber weitestgehend ein dreistufiges Verfahren („dreistufige Volksgesetzgebung“) in den Bundesländern etabliert:
+Volksabstimmungen stellen eine Form von direkter Demokratie dar, über die Initiativen direkt aus der engagierten Zivilgesellschaft in den Gesetzgebungsprozess eingebracht werden können. Volksabstimmungen sind mittlerweile in allen Bundesländern Deutschlands gesetzlich geregelt und in vielen davon bewährte Praxis.
+
+Grundlage für die Volksgesetzgebung ist der Artikel 20, Absatz 2 im  Grundgesetz der Bundesrepublik Deutschland („Alle Staatsgewalt geht vom Volke aus. Sie wird vom Volk in Wahlen und Abstimmungen […] ausgeübt.") sowie die entsprechenden Artikel der Landesverfassungen, in denen die einzelnen Stufen der Volksgesetzgebung benannt werden.
+
+Die Details des Verfahrens werden wiederum durch Ausführungsgesetze auf Ebene der Bundesländer geregelt. Insbesondere hinsichtlich der Unterschriftenhürden und Quoren variieren die Regelungen von Bundesland zu Bundesland stark. Auch sind die Begrifflichkeiten für die Verfahrensstufen nicht immer einheitlich. Es hat sich aber weitestgehend ein dreistufiges Verfahren („dreistufige Volksgesetzgebung“) in den Bundesländern etabliert:
 
 1. Volksinitiative bzw. Antrag auf Volksbegehren
 2. Volksbegehren
