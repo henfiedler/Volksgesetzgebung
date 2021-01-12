@@ -7,9 +7,8 @@ library("sf")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
-df <- read_excel("VB_VE.xlsx") %>%
+df <- read_excel("Reformen.xlsx") %>%
     rename(NAME_1 = Bundesland)
-
 
 # Geodaten für Deutschland (nach Bundesländern)
 ger <- readRDS("gadm36_DEU_1_sf.rds") %>% 

@@ -7,7 +7,7 @@ library("sf")
 
 ## Daten laden ------------------------------------------------------
 # Reformen der Volksgesetzgebung
-df <- read_excel("VB_VE.xlsx") %>%
+df <- read_excel("Reformen.xlsx") %>%
     rename(NAME_1 = Bundesland)
 
 
