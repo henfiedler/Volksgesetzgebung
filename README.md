@@ -10,7 +10,7 @@ Ziel dieser App ist es, die vielgestaltige Entwicklung der Volksgesetzgebung in 
 
 Quellen:
 - [Meerkamp, Frank (2011). Die Quorenfrage im Volksgesetzgebungsverfahren. Wiesbaden: VS Verlag für Sozialwissenschaften](https://www.springer.com/de/book/9783531180649#aboutBook)
-- Mehr Demokratie: [Volksbegehrensberichte](https://www.mehr-demokratie.de/volksbegehrensbericht/) und [Volksentscheidsrankings](https://www.mehr-demokratie.de/volksentscheidsranking/)
+- Mehr Demokratie e.V.: [Volksbegehrensberichte](https://www.mehr-demokratie.de/volksbegehrensbericht/) und [Volksentscheidsrankings](https://www.mehr-demokratie.de/volksentscheidsranking/)
 
 
 ------------
