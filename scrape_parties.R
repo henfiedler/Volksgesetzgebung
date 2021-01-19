@@ -17,7 +17,7 @@ laender_colnames <- wiki_tabellen %>%
   names()
 
 laender_df <- wiki_tabellen %>% 
-  magrittr::extract(c(3:9, 11:19)) %>% 
+  magrittr::extract(c(3:11, 13:19)) %>% 
   set_names(laender) %>% 
   map(set_names, nm = laender_colnames) %>% 
   map_df(bind_rows, .id = "land") %>% 
