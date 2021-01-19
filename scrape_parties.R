@@ -23,7 +23,8 @@ laender_df <- wiki_tabellen %>%
   map_df(bind_rows, .id = "land") %>% 
   select(-bild) %>% 
   filter(str_detect(amtszeit, "\\d+\\. \\w+ (\\d){4}"),
-         !str_detect(amtszeit, "suspendiert")) %>% 
+         !str_detect(amtszeit, "das Land")) %>% 
+  mutate(amtszeit = str_remove(amtszeit, "\\(\\d+\\.\\) ")) %>% 
   separate(amtszeit, c("amtszeit_von", "amtszeit_bis"), "–", remove = FALSE) %>% 
   mutate(across(starts_with("amtszeit_"),
                 ~ dmy(.x, locale = if_else(Sys.info()[["sysname"]] == "Windows",
