@@ -7,7 +7,7 @@ source(here::here("long_gg_theme.R"), echo = FALSE)
 
 # Data --------------------------------------------------------------------
 
-reformen <- read_csv(here::here("Reformen.csv"), col_types = "Diiicccc")
+reformen <- readRDS(here::here("reformen.RDS"))
 
 landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>% 
   filter(!(land == "Saarland" & regierung == "Verwaltungskommission")) %>% 
