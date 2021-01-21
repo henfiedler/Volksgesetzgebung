@@ -85,6 +85,7 @@ ui <- dashboardPage(skin = "purple",
         }
         body {
           font-family: 'Fira Sans', sans-serif;
+          font-variant-numeric: tabular-nums;
         }
       "))
     ),
