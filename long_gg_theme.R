@@ -21,7 +21,7 @@ theme_fira <- function(base_size = 11.5) {
     theme(
       axis.text = element_text(size = rel(.9)),
       axis.title = element_text(
-        family = "Fira Sans Medium",
+        face = "bold",
         hjust = 1
       ),
       legend.background = element_blank(),
@@ -32,7 +32,7 @@ theme_fira <- function(base_size = 11.5) {
       panel.grid.minor = element_blank(),
       panel.spacing = unit(base_size * 1.3, "pt"),
       plot.title = element_text(
-        family = "Fira Sans Medium",
+        face = "bold",
         size = rel(1.5),
         lineheight = 1.15,
         margin = unit(c(0, 0, base_size * 1.3, 0), "pt"),
@@ -50,7 +50,7 @@ theme_fira <- function(base_size = 11.5) {
       plot.caption.position = "plot",
       plot.margin = margin(15, 15, 15, 15),
       strip.text = element_text(
-        family = "Fira Sans Medium",
+        face = "bold",
         size = rel(1.05),
         hjust = 0
       )
