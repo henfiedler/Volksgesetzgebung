@@ -37,6 +37,7 @@ Moser, Christian (1985). Institutionen und Verfahren der Rechtsetzung in den Kan
 Variablen (institutional openness)
 ----------------------------------
 
+- volksgesetzgebung (ja/nein)
 - stufen (zweistufig vs. dreistufig)
 - unterschriftenquorum_vi_abs
 - eligible_population (wird benötigt um Quroum in % zu berechnen falls absolute Unterschriftenzahl gilt) 
