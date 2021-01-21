@@ -162,7 +162,7 @@ server <- function(input, output, session) {
     reformen %>% 
       filter(Reform == input$timeline_selected) %>% 
       mutate(description = glue::glue("
-        <p><b>{Bundesland} &mdash; {Reform}</b></p>
+        <p><b>{Bundesland} &mdash; {Typ}</b></p>
         <p><i>Amtierende Partei: {partei}</i></p>
         <p>{Beschreibung}</p>
       ")) %>% 
