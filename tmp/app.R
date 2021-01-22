@@ -7,7 +7,8 @@ source(here::here("long_gg_theme.R"), echo = FALSE)
 
 # Data --------------------------------------------------------------------
 
-reformen <- read.csv(here::here("Reformen.csv"), colClasses = c(Reform = "Date"))
+reformen <- read_csv(here::here("Reformen.csv"), col_types = "Diiicccc")
+
 
 landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>% 
   filter(!(land == "Saarland" & regierung == "Verwaltungskommission")) %>% 
@@ -43,7 +44,10 @@ gg_reformen <- reformen %>%
   labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake)", colour = NULL,
        title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
        subtitle = "(Die Maus über einen der Punkte halten für mehr Details)") +
-  scale_colour_manual_interactive(data_id = levels(fct_infreq(reformen$partei_legend)),
+  scale_colour_manual_interactive(data_id = reformen$partei_legend %>% 
+                                    fct_infreq() %>% 
+                                    levels() %>% 
+                                    stringi::stri_enc_toutf8(),
                                   values = c("CDU/CSU/CVP" = "#000000",
                                              "FDP" = "#ffe600",
                                              "Grüne" = "#187f2b",
