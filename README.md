@@ -16,7 +16,7 @@ Quellen:
 - [Meerkamp, Frank (2011). Die Quorenfrage im Volksgesetzgebungsverfahren. Wiesbaden: VS Verlag für Sozialwissenschaften](https://www.springer.com/de/book/9783531180649#aboutBook)
 - Mehr Demokratie e.V.: [Volksbegehrensberichte](https://www.mehr-demokratie.de/volksbegehrensbericht/) und [Volksentscheidsrankings](https://www.mehr-demokratie.de/volksentscheidsranking/)
 
-
+Interaktive Datenbasis [Google-Spreadsheet]: https://docs.google.com/spreadsheets/d/1yE0K6pNSg4Wq0b6BVLZPfZyFXsqom-5XeFQGNTDx7xE/edit#gid=1680658277
 ------------
 
 Anmerkung: Setting up GithUb
