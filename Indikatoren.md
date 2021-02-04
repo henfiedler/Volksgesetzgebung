@@ -34,3 +34,25 @@ Moser, Christian (1985). Institutionen und Verfahren der Rechtsetzung in den Kan
 
 	- proposed the mobilisation coefficient
 
+Variablen (institutional openness)
+----------------------------------
+
+- volksgesetzgebung (ja/nein)
+- stufen (zweistufig vs. dreistufig)
+- unterschriftenquorum_vi_abs
+- eligible_population (wird benötigt um Quroum in % zu berechnen falls absolute Unterschriftenzahl gilt) 
+- unterschriftenquorum_vi (% der abstimmunsberechtigten Bevölkerung)
+- sammelfrist_vi (Tage)
+- mobilisierungskoeffizient_vi (unterschriftenquorum_vi / sammelfrist_vi)
+- unterschriftenquorum_vb (% der abstimmungsberechtigten Bevölkerung)
+- sammelfrist_vb (Tage)
+- mobilisierungskoeffizient_vb (unterschriftenquorum_vb / sammelfrist_vb)
+- amtseintragung_vi (ja/nein Amtseintragung vs. freie Sammlung)
+- amtseintragung_vb (ja/nein Amtseintragung vs. freie Sammlung)
+
+Variablen (nice to have)
+------------------------
+
+- verfassungsänderung (ja/nein VE über Verfassungsänderung möglich)
+- finanztabu (ja/nein)
+- zustimmungsquorum
