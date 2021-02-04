@@ -64,6 +64,28 @@ gg_karte <- de_geodaten %>%
   coord_sf(expand = FALSE, label_axes = "----") +
   panel_grid(FALSE)
 
+
+#  Barplot ----------------------------------------------------------------
+
+gg_barplot <- reformen %>% 
+  group_by(partei_legend, Jahr) %>% 
+  mutate(n = n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Jahr, y = n, fill = fct_infreq(partei_legend))) +
+  geom_bar(position = "stack", stat = "identity", width = 1) +
+  labs(x = NULL, y = "Anzahl der Reformen") +
+  scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
+  scale_fill_manual(reformen$partei_legend %>% 
+                      fct_infreq() %>% 
+                      levels() %>% 
+                      stringi::stri_enc_toutf8(),
+                    values = c("CDU/CSU/CVP" = "#000000",
+                               "FDP" = "#ffe600",
+                               "Grüne" = "#187f2b",
+                               "parteilos" = "grey",
+                               "SPD" = "#ed0020"))
+  
+  
 # UI ----------------------------------------------------------------------
 
 ui <- dashboardPage(skin = "purple",
@@ -73,7 +95,7 @@ ui <- dashboardPage(skin = "purple",
   dashboardSidebar(
     sidebarMenu(
       menuItem("Überblick", tabName = "ueberblick"),
-      menuItem("Lorem ipsum", tabName = "loremipsum")
+      menuItem("Anzahl Reformen", tabName = "anzahl")
     )
   ),
   
@@ -111,8 +133,12 @@ ui <- dashboardPage(skin = "purple",
                 uiOutput("reform_description")))
       ),
       
-      # Tab ...
-      tabItem(tabName = "loremipsum")
+      tabItem(tabName = "anzahl",
+        
+        box(width = 8,
+            plotOutput("barplot", height = "480px"))
+              
+      )
     )
   )
 )
@@ -173,6 +199,12 @@ server <- function(input, output, session) {
       ")) %>% 
       pull(description) %>% 
       HTML()
+  })
+  
+  output$barplot <- renderPlot({
+  
+    gg_barplot
+    
   })
   
   # Interactivity between widgets ----
