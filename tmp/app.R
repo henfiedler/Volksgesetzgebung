@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(tidyverse)
+library(ggrepel)
 library(ggiraph)
 
 source(here::here("long_gg_theme.R"), echo = FALSE)
@@ -17,6 +18,9 @@ landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>%
                                 amtszeit_bis))
 
 de_geodaten <- rnaturalearth::ne_states(country = "Germany", returnclass = "sf")
+
+timeline <- readxl::read_excel(here::here("timeline.xlsx"), col_types = c("text", "text")) %>% 
+  mutate(datum = as.Date(datum))
 
 reformen <- reformen %>% 
   fuzzyjoin::fuzzy_left_join(landesregierungen %>% 
@@ -38,8 +42,15 @@ reformen <- reformen %>%
 # Timeline scatterplot base -----------------------------------------------
 
 gg_reformen <- reformen %>%
-  ggplot(aes(Reform, .5, colour = fct_infreq(partei_legend))) +
-  geom_jitter_interactive(aes(data_id = Reform, tooltip = Reform),
+  ggplot(aes(Reform, .5)) + 
+   
+  geom_vline_interactive(data = timeline, aes(xintercept = datum, tooltip = ereignis),
+                         color= "firebrick", alpha = .5, size = 2) +
+   
+  #geom_text_interactive(data = timeline, aes(x = datum, y = -Inf, label = datum), 
+  #                     show.legend = FALSE, size = 3) +
+   
+  geom_jitter_interactive(aes(data_id = Reform, tooltip = Reform, colour = fct_infreq(partei_legend)),
                           size = 3) +
   labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
        title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
