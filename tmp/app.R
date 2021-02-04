@@ -8,7 +8,11 @@ source(here::here("long_gg_theme.R"), echo = FALSE)
 
 # Data --------------------------------------------------------------------
 
-reformen <- read_csv(here::here("Reformen.csv"), col_types = "Diiicccc")
+reformen <- read_csv(here::here("Reformen.csv"), col_types = cols(Verabschiedung = col_date(format = "%Y-%m-%d"), 
+                                                      Inkrafttreten = col_date(format = "%Y-%m-%d"), 
+                                                      unterschriftenquorum_vi_abs = col_double(), 
+                                                      eligible_population = col_double(), unterschriftenquorum_vi = col_double(), 
+                                                      sammelfrist_vi = col_double(), mobilisierungskoeffizient_vi = col_double()))
 
 
 landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>% 
@@ -26,8 +30,8 @@ reformen <- reformen %>%
   fuzzyjoin::fuzzy_left_join(landesregierungen %>% 
                                select(land, amtszeit_von, amtszeit_bis, partei),
                              by = c("Bundesland" = "land",
-                                    "Reform" = "amtszeit_von",
-                                    "Reform" = "amtszeit_bis"),
+                                    "Verabschiedung" = "amtszeit_von",
+                                    "Verabschiedung" = "amtszeit_bis"),
                              match_fun = list(`==`, `>=`, `<=`)) %>% 
   mutate(partei_legend = case_when(is.na(partei) ~ "parteilos",
                                    str_detect(partei, "Grüne") ~ "Grüne",
@@ -42,7 +46,7 @@ reformen <- reformen %>%
 # Timeline scatterplot base -----------------------------------------------
 
 gg_reformen <- reformen %>%
-  ggplot(aes(Reform, .5)) + 
+  ggplot(aes(Verabschiedung, .5)) + 
    
   geom_vline_interactive(data = timeline, aes(xintercept = datum, tooltip = ereignis),
                          color= "firebrick", alpha = .5, size = 2) +
@@ -50,7 +54,7 @@ gg_reformen <- reformen %>%
   #geom_text_interactive(data = timeline, aes(x = datum, y = -Inf, label = datum), 
   #                     show.legend = FALSE, size = 3) +
    
-  geom_jitter_interactive(aes(data_id = Reform, tooltip = Reform, colour = fct_infreq(partei_legend)),
+  geom_jitter_interactive(aes(data_id = Verabschiedung, tooltip = Verabschiedung, colour = fct_infreq(partei_legend)),
                           size = 3) +
   labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
        title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
@@ -79,10 +83,10 @@ gg_karte <- de_geodaten %>%
 #  Barplots ----------------------------------------------------------------
 
 gg_bar_partei <- reformen %>% 
-  group_by(partei_legend, Jahr) %>% 
+  group_by(partei_legend, Ver_Jahr) %>% 
   mutate(n = n()) %>% 
   ungroup() %>% 
-  ggplot(aes(x = Jahr, y = n, fill = fct_infreq(partei_legend))) +
+  ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(partei_legend))) +
   geom_bar(position = "stack", stat = "identity", width = 1) +
   labs(x = NULL, y = "Anzahl der Reformen") +
   scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
@@ -97,10 +101,10 @@ gg_bar_partei <- reformen %>%
                                "SPD" = "#ed0020"))
   
 gg_bar_bundl <- reformen %>% 
-  group_by(Bundesland, Jahr) %>% 
+  group_by(Bundesland, Ver_Jahr) %>% 
   mutate(n = n()) %>% 
   ungroup() %>% 
-  ggplot(aes(x = Jahr, y = n, fill = fct_infreq(Bundesland))) +
+  ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(Bundesland))) +
   geom_bar(position = "stack", stat = "identity", width = 1) +
   labs(x = NULL, y = "Anzahl der Reformen") +
   scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
@@ -236,7 +240,7 @@ server <- function(input, output, session) {
     )
     
     reformen %>% 
-      filter(Reform == input$timeline_selected) %>% 
+      filter(Verabschiedung == input$timeline_selected) %>% 
       mutate(description = glue::glue("
         <p><b>{Bundesland} &mdash; {Typ}</b></p>
         <p><i>Amtierende Partei: {partei}</i></p>
@@ -270,7 +274,7 @@ server <- function(input, output, session) {
       # Hovering in timeline -> hovering in map
       session$sendCustomMessage(
         type = "minikarte_hovered_set",
-        message = reformen$iso_3166_2[reformen$Reform == input$timeline_hovered]
+        message = reformen$iso_3166_2[reformen$Verabschiedung == input$timeline_hovered]
       )
     } else if (length(input$timeline_hovered) > 1) {
       session$sendCustomMessage(
@@ -295,7 +299,7 @@ server <- function(input, output, session) {
     # Hovering over party legend -> hovering in timeline
     session$sendCustomMessage(
       type = "timeline_hovered_set",
-      message = reformen$Reform[reformen$partei_legend == input$timeline_key_hovered]
+      message = reformen$Verabschiedung[reformen$partei_legend == input$timeline_key_hovered]
     )
   })
 
@@ -303,7 +307,7 @@ server <- function(input, output, session) {
     # Selection in map -> hovering in timeline
     session$sendCustomMessage(
       type = "timeline_hovered_set",
-      message = reformen$Reform[reformen$iso_3166_2 == input$minikarte_selected]
+      message = reformen$Verabschiedung[reformen$iso_3166_2 == input$minikarte_selected]
     )
   })
   
