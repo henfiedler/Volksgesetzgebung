@@ -41,7 +41,7 @@ gg_reformen <- reformen %>%
   ggplot(aes(Reform, .5, colour = fct_infreq(partei_legend))) +
   geom_jitter_interactive(aes(data_id = Reform, tooltip = Reform),
                           size = 3) +
-  labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake)", colour = NULL,
+  labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
        title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
        subtitle = "(Die Maus über einen der Punkte halten für mehr Details)") +
   scale_colour_manual_interactive(data_id = reformen$partei_legend %>% 
@@ -73,7 +73,19 @@ ui <- dashboardPage(skin = "purple",
   dashboardSidebar(
     sidebarMenu(
       menuItem("Überblick", tabName = "ueberblick"),
-      menuItem("Lorem ipsum", tabName = "loremipsum")
+      menuItem("Lorem ipsum", tabName = "loremipsum"),
+      tags$footer(
+        div("Daten von ",
+            a("Mehr Demokratie e.V.",
+              href = "https://www.mehr-demokratie.de/")),
+        align = "center",
+        style = "
+          position: absolute;
+          bottom: 10px;
+          width: 100%;
+          z-index: 1000;
+          font-size: small;
+        ")
     )
   ),
   
