@@ -64,6 +64,41 @@ gg_karte <- de_geodaten %>%
   coord_sf(expand = FALSE, label_axes = "----") +
   panel_grid(FALSE)
 
+
+#  Barplots ----------------------------------------------------------------
+
+gg_bar_partei <- reformen %>% 
+  group_by(partei_legend, Jahr) %>% 
+  mutate(n = n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Jahr, y = n, fill = fct_infreq(partei_legend))) +
+  geom_bar(position = "stack", stat = "identity", width = 1) +
+  labs(x = NULL, y = "Anzahl der Reformen") +
+  scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
+  scale_fill_manual(reformen$partei_legend %>% 
+                      fct_infreq() %>% 
+                      levels() %>% 
+                      stringi::stri_enc_toutf8(),
+                    values = c("CDU/CSU/CVP" = "#000000",
+                               "FDP" = "#ffe600",
+                               "Grüne" = "#187f2b",
+                               "parteilos" = "grey",
+                               "SPD" = "#ed0020"))
+  
+gg_bar_bundl <- reformen %>% 
+  group_by(Bundesland, Jahr) %>% 
+  mutate(n = n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Jahr, y = n, fill = fct_infreq(Bundesland))) +
+  geom_bar(position = "stack", stat = "identity", width = 1) +
+  labs(x = NULL, y = "Anzahl der Reformen") +
+  scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
+  scale_fill_discrete(reformen$Bundesland %>% 
+                      fct_infreq() %>% 
+                      levels() %>% 
+                      stringi::stri_enc_toutf8()) +
+  theme(legend.title = element_blank())
+  
 # UI ----------------------------------------------------------------------
 
 ui <- dashboardPage(skin = "purple",
@@ -73,7 +108,9 @@ ui <- dashboardPage(skin = "purple",
   dashboardSidebar(
     sidebarMenu(
       menuItem("Überblick", tabName = "ueberblick"),
-      menuItem("Lorem ipsum", tabName = "loremipsum")
+      menuItem("Anzahl Reformen", tabName = "anzahl",
+               menuSubItem("Nach Partei", tabName = "anzpartei"),
+               menuSubItem("Nach Bundesland", tabName = "anzbundl"))
     )
   ),
   
@@ -111,8 +148,19 @@ ui <- dashboardPage(skin = "purple",
                 uiOutput("reform_description")))
       ),
       
-      # Tab ...
-      tabItem(tabName = "loremipsum")
+      tabItem(tabName = "anzpartei",
+        
+        box(width = 8,
+            plotOutput("bar_partei", height = "480px"))
+              
+      ),
+      
+      tabItem(tabName = "anzbundl",
+              
+              box(width = 8,
+                  plotOutput("bar_bundl", height = "480px"))
+              
+      )
     )
   )
 )
@@ -173,6 +221,18 @@ server <- function(input, output, session) {
       ")) %>% 
       pull(description) %>% 
       HTML()
+  })
+  
+  output$bar_partei <- renderPlot({
+  
+    gg_bar_partei
+    
+  })
+  
+  output$bar_bundl <- renderPlot({
+    
+    gg_bar_bundl
+    
   })
   
   # Interactivity between widgets ----
