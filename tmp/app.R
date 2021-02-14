@@ -8,11 +8,14 @@ source(here::here("long_gg_theme.R"), echo = FALSE)
 
 # Data --------------------------------------------------------------------
 
-reformen <- read_csv(here::here("Reformen.csv"), col_types = cols(Verabschiedung = col_date(format = "%Y-%m-%d"), 
-                                                      Inkrafttreten = col_date(format = "%Y-%m-%d"), 
-                                                      unterschriftenquorum_vi_abs = col_double(), 
-                                                      eligible_population = col_double(), unterschriftenquorum_vi = col_double(), 
-                                                      sammelfrist_vi = col_double(), mobilisierungskoeffizient_vi = col_double()))
+reformen <- read_csv(here::here("Reformen.csv"),
+                     col_types = cols(Verabschiedung = col_date(format = "%Y-%m-%d"), 
+                                      Inkrafttreten = col_date(format = "%Y-%m-%d"), 
+                                      unterschriftenquorum_vi_abs = col_double(), 
+                                      eligible_population = col_double(),
+                                      unterschriftenquorum_vi = col_double(), 
+                                      sammelfrist_vi = col_double(),
+                                      mobilisierungskoeffizient_vi = col_double()))
 
 
 landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>% 
@@ -79,41 +82,6 @@ gg_karte <- de_geodaten %>%
   coord_sf(expand = FALSE, label_axes = "----") +
   panel_grid(FALSE)
 
-
-#  Barplots ----------------------------------------------------------------
-
-gg_bar_partei <- reformen %>% 
-  group_by(partei_legend, Ver_Jahr) %>% 
-  mutate(n = n()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(partei_legend))) +
-  geom_bar(position = "stack", stat = "identity", width = 1) +
-  labs(x = NULL, y = "Anzahl der Reformen") +
-  scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
-  scale_fill_manual(reformen$partei_legend %>% 
-                      fct_infreq() %>% 
-                      levels() %>% 
-                      stringi::stri_enc_toutf8(),
-                    values = c("CDU/CSU/CVP" = "#000000",
-                               "FDP" = "#ffe600",
-                               "Grüne" = "#187f2b",
-                               "parteilos" = "grey",
-                               "SPD" = "#ed0020"))
-  
-gg_bar_bundl <- reformen %>% 
-  group_by(Bundesland, Ver_Jahr) %>% 
-  mutate(n = n()) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(Bundesland))) +
-  geom_bar(position = "stack", stat = "identity", width = 1) +
-  labs(x = NULL, y = "Anzahl der Reformen") +
-  scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
-  scale_fill_discrete(reformen$Bundesland %>% 
-                      fct_infreq() %>% 
-                      levels() %>% 
-                      stringi::stri_enc_toutf8()) +
-  theme(legend.title = element_blank())
-  
 # UI ----------------------------------------------------------------------
 
 ui <- dashboardPage(skin = "purple",
@@ -137,19 +105,23 @@ ui <- dashboardPage(skin = "purple",
           width: 100%;
           z-index: 1000;
           font-size: small;
-        ")
+        "
+      )
     )
   ),
   
   dashboardBody(
     
     tags$head(
-      tags$link(href = "https://code.cdn.mozilla.net/fonts/fira.css",
+      tags$link(href = "//brick.freetls.fastly.net/Fira+Sans:400,500,700,400i,500i,700i",
                 rel = "stylesheet"),
       tags$style(HTML("
         .main-header .logo {
           font-family: 'Fira Sans', sans-serif;
           font-weight: 500;
+        }
+        .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+          font-family: 'Fira Sans', sans-serif;
         }
         body {
           font-family: 'Fira Sans', sans-serif;
@@ -163,15 +135,15 @@ ui <- dashboardPage(skin = "purple",
       # Tab "Überblick"
       tabItem(tabName = "ueberblick",
         
-        box(width = 9, height = 720,
-            ggiraphOutput("timeline", height = "700px")),
+        box(width = 9, height = "90vh",
+            ggiraphOutput("timeline", height = "calc(90vh - 40px)")),
         
-        box(width = 3, height = 360,
+        box(width = 3, height = "45vh",
             div("Klicken, um nach Bundesland zu filtern"),
-            ggiraphOutput("minikarte", height = "320px")),
+            ggiraphOutput("minikarte", height = "calc(45vh - 40px)")),
         
-        box(width = 3, height = 340, title = "Beschreibung",
-            div(style = "overflow-y: scroll; height: 275px",
+        box(width = 3, height = "calc(45vh - 20px)", title = "Beschreibung",
+            div(style = "overflow-y: scroll; height: calc(45vh - 85px)",
                 uiOutput("reform_description")))
       ),
       
@@ -252,13 +224,41 @@ server <- function(input, output, session) {
   
   output$bar_partei <- renderPlot({
   
-    gg_bar_partei
+    reformen %>% 
+      group_by(partei_legend, Ver_Jahr) %>% 
+      mutate(n = n()) %>% 
+      ungroup() %>% 
+      ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(partei_legend))) +
+      geom_bar(position = "stack", stat = "identity", width = 1) +
+      labs(x = NULL, y = "Anzahl der Reformen") +
+      scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
+      scale_fill_manual(reformen$partei_legend %>% 
+                          fct_infreq() %>% 
+                          levels() %>% 
+                          stringi::stri_enc_toutf8(),
+                        values = c("CDU/CSU/CVP" = "#000000",
+                                   "FDP" = "#ffe600",
+                                   "Grüne" = "#187f2b",
+                                   "parteilos" = "grey",
+                                   "SPD" = "#ed0020"))
     
   })
   
   output$bar_bundl <- renderPlot({
     
-    gg_bar_bundl
+    reformen %>% 
+      group_by(Bundesland, Ver_Jahr) %>% 
+      mutate(n = n()) %>% 
+      ungroup() %>% 
+      ggplot(aes(x = Ver_Jahr, y = n, fill = fct_infreq(Bundesland))) +
+      geom_bar(position = "stack", stat = "identity", width = 1) +
+      labs(x = NULL, y = "Anzahl der Reformen") +
+      scale_x_continuous(breaks = seq(1950, 2020, by = 5)) +
+      scale_fill_discrete(reformen$Bundesland %>% 
+                            fct_infreq() %>% 
+                            levels() %>% 
+                            stringi::stri_enc_toutf8()) +
+      theme(legend.title = element_blank())
     
   })
   
