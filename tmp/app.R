@@ -57,7 +57,9 @@ gg_reformen <- reformen %>%
   #geom_text_interactive(data = timeline, aes(x = datum, y = -Inf, label = datum), 
   #                     show.legend = FALSE, size = 3) +
    
-  geom_jitter_interactive(aes(data_id = Verabschiedung, tooltip = Verabschiedung, colour = fct_infreq(partei_legend)),
+  geom_jitter_interactive(aes(data_id = Verabschiedung,
+                              tooltip = Verabschiedung,
+                              colour = fct_infreq(partei_legend)),
                           size = 3) +
   labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
        title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
@@ -71,6 +73,7 @@ gg_reformen <- reformen %>%
                                              "Grüne" = "#187f2b",
                                              "parteilos" = "grey",
                                              "SPD" = "#ed0020")) +
+  theme_fira() +
   panel_grid("XxY")
 
 # German map base ---------------------------------------------------------
@@ -80,6 +83,7 @@ gg_karte <- de_geodaten %>%
   geom_sf_interactive(aes(data_id = iso_3166_2, tooltip = name),
                       colour = "#f8f8f8") +
   coord_sf(expand = FALSE, label_axes = "----") +
+  theme_fira() +
   panel_grid(FALSE)
 
 # UI ----------------------------------------------------------------------

@@ -57,8 +57,6 @@ theme_fira <- function(base_size = 11.5) {
     )
 }
 
-theme_set(theme_fira())
-
 # Function to specify grid lines ------------------------------------------
 
 panel_grid <- function(grid = "XY", on_top = FALSE,
