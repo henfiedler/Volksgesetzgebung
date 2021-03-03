@@ -244,8 +244,7 @@ server <- function(input, output, session) {
                                    "FDP" = "#ffe600",
                                    "Grüne" = "#187f2b",
                                    "parteilos" = "grey",
-                                   "SPD" = "#ed0020")) +
-      theme_fira()
+                                   "SPD" = "#ed0020"))
     
   })
   
@@ -263,8 +262,7 @@ server <- function(input, output, session) {
                             fct_infreq() %>% 
                             levels() %>% 
                             stringi::stri_enc_toutf8()) +
-      theme(legend.title = element_blank()) +
-      theme_fira()
+      theme(legend.title = element_blank())
     
   })
   
