@@ -26,7 +26,7 @@ landesregierungen <- readRDS(here::here("landesregierungen.RDS")) %>%
 
 de_geodaten <- rnaturalearth::ne_states(country = "Germany", returnclass = "sf")
 
-timeline <- readxl::read_excel(here::here("timeline.xlsx"), col_types = c("text", "text")) %>% 
+timeline <- readxl::read_excel(here::here("timeline.xlsx"), col_types = c("text", "text", "text", "text")) %>% 
   mutate(datum = as.Date(datum))
 
 reformen <- reformen %>% 
