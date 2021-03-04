@@ -17,7 +17,7 @@ Quellen:
 - Mehr Demokratie e.V.: [Volksbegehrensberichte](https://www.mehr-demokratie.de/volksbegehrensbericht/) und [Volksentscheidsrankings](https://www.mehr-demokratie.de/volksentscheidsranking/)
 
 Interaktive Datenbasis [Google-Spreadsheet]:
-https://docs.google.com/spreadsheets/d/1yE0K6pNSg4Wq0b6BVLZPfZyFXsqom-5XeFQGNTDx7xE/edit#gid=1680658277
+- https://docs.google.com/spreadsheets/d/1yE0K6pNSg4Wq0b6BVLZPfZyFXsqom-5XeFQGNTDx7xE/edit#gid=1680658277
 ------------
 
 Anmerkung: Setting up GithUb
