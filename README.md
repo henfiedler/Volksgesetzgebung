@@ -19,7 +19,7 @@ Quellen:
 Interaktive Datenbasis [Google-Spreadsheet]:
 - https://docs.google.com/spreadsheets/d/1yE0K6pNSg4Wq0b6BVLZPfZyFXsqom-5XeFQGNTDx7xE/edit#gid=1680658277
 
-Nähere Anmerkungen wie der Index für die Anwendungsfreundlichkeit ermittelt werden kann in [Indikatoren.md](https://github.com/henfiedler/Volksgesetzgebung/blob/14757f6b3938ead6f942a806ef53ba4465a9044f/Indikatoren.md)
+Nähere Anmerkungen, wie der Index für die Anwendungsfreundlichkeit ermittelt werden kann, in Indikatoren.md.
 
 ------------
 
