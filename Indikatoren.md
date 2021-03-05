@@ -36,16 +36,17 @@ Moser, Christian (1985). Institutionen und Verfahren der Rechtsetzung in den Kan
 
 Variablen (institutional openness)
 ----------------------------------
+CODEBOOK:
 
-- volksgesetzgebung (ja/nein)
-- stufen (zweistufig vs. dreistufig)
-- unterschriftenquorum_vi_abs
+- volksgesetzgebung (nein = 0, ja = 1)
+- stufen (zweistufig = 2, dreistufig = 3)
+- unterschriftenquorum_vi_abs (in absoluten Zahlen)
 - eligible_population (wird benötigt um Quroum in % zu berechnen falls absolute Unterschriftenzahl gilt) 
 - unterschriftenquorum_vi (% der abstimmunsberechtigten Bevölkerung)
-- sammelfrist_vi (Tage)
+- sammelfrist_vi (in Tagen)
 - mobilisierungskoeffizient_vi (unterschriftenquorum_vi / sammelfrist_vi)
 - unterschriftenquorum_vb (% der abstimmungsberechtigten Bevölkerung)
-- sammelfrist_vb (Tage)
+- sammelfrist_vb (in Tagen)
 - mobilisierungskoeffizient_vb (unterschriftenquorum_vb / sammelfrist_vb)
 - amtseintragung_vi (ja/nein Amtseintragung vs. freie Sammlung)
 - amtseintragung_vb (ja/nein Amtseintragung vs. freie Sammlung)
@@ -53,6 +54,6 @@ Variablen (institutional openness)
 Variablen (nice to have)
 ------------------------
 
-- verfassungsänderung (ja/nein VE über Verfassungsänderung möglich)
-- finanztabu (ja/nein)
-- zustimmungsquorum
+- verfassungsänderung (VE über Verfassungsänderung möglich; 0 = nein, 1 = ja)
+- finanztabu (nein = 0, ja = 1)
+- zustimmungsquorum ()
