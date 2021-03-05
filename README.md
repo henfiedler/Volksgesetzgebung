@@ -12,8 +12,6 @@ Die Details des Verfahrens werden wiederum durch Ausführungsgesetze auf Ebene d
 
 Ziel dieser App ist es, die vielgestaltige Entwicklung der Volksgesetzgebung in den Bundesländern seit 1946 nachzuzeichnen und zukünftige Entwicklungen festzuhalten. Ausgangspunkt sind dabei die Landesverfassungen der westdeutschen Bundesländer nach dem Zweiten Weltkrieg sowie die Landesverfassungen der ostdeutschen Bundesländer nach der Wiedervereinigung, die Verabschiedung dazugehöriger Ausführungsgesetze sowie Reformen der Verfassungen und Gesetze auf Landesebene.
 
-https://github.com/henfiedler/Volksgesetzgebung/blob/14757f6b3938ead6f942a806ef53ba4465a9044f/Indikatoren.md
-
 Quellen:
 - [Meerkamp, Frank (2011). Die Quorenfrage im Volksgesetzgebungsverfahren. Wiesbaden: VS Verlag für Sozialwissenschaften](https://www.springer.com/de/book/9783531180649#aboutBook)
 - Mehr Demokratie e.V.: [Volksbegehrensberichte](https://www.mehr-demokratie.de/volksbegehrensbericht/) und [Volksentscheidsrankings](https://www.mehr-demokratie.de/volksentscheidsranking/)
