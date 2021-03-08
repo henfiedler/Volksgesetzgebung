@@ -56,4 +56,7 @@ Variablen (nice to have)
 
 - verfassungsänderung (VE über Verfassungsänderung möglich; 0 = nein, 1 = ja)
 - finanztabu (nein = 0, ja = 1)
-- zustimmungsquorum ()
+- beteiligungsquorum (% der abstimmungsberechtigten Bevölkerung, Na wenn keines vorhanden)
+- beteiligungsquorum_verf (% der abstimmungsberechtigten Bevölkerung bei verfassungsänderndem Referendum)
+- zustimmungsquorum (% der abstimmungsberechtigten Bevölkerung, 0 wenn keines vorhanden)
+- zustimmungsqourum_verf (% der abstimmungsberechtigten Bevölkerung bei verfassungsänderndem Referendum)
