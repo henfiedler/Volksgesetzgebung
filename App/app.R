@@ -46,36 +46,6 @@ reformen <- reformen %>%
               select(name, iso_3166_2),
             by = c("Bundesland" = "name"))
 
-# Timeline scatterplot base -----------------------------------------------
-
-gg_reformen <- reformen %>%
-  ggplot(aes(Verabschiedung, .5)) + 
-   
-  geom_vline_interactive(data = timeline, aes(xintercept = datum, tooltip = ereignis),
-                         color= "firebrick", alpha = .5, size = 2) +
-   
-  #geom_text_interactive(data = timeline, aes(x = datum, y = -Inf, label = datum), 
-  #                     show.legend = FALSE, size = 3) +
-   
-  geom_jitter_interactive(aes(data_id = Verabschiedung,
-                              tooltip = Verabschiedung,
-                              colour = fct_infreq(partei_legend)),
-                          size = 3) +
-  labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
-       title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
-       subtitle = "(Die Maus über einen der Punkte halten für mehr Details)") +
-  scale_colour_manual_interactive(data_id = reformen$partei_legend %>% 
-                                    fct_infreq() %>% 
-                                    levels() %>% 
-                                    stringi::stri_enc_toutf8(),
-                                  values = c("CDU/CSU/CVP" = "#000000",
-                                             "FDP" = "#ffe600",
-                                             "Grüne" = "#187f2b",
-                                             "parteilos" = "grey",
-                                             "SPD" = "#ed0020")) +
-  theme_fira() +
-  panel_grid("XxY")
-
 # German map base ---------------------------------------------------------
 
 gg_karte <- de_geodaten %>% 
@@ -94,6 +64,14 @@ ui <- dashboardPage(skin = "purple",
   
   dashboardSidebar(
     sidebarMenu(
+      selectInput("bundesland_selection", 
+                  "Auswahl des Bundeslandes", 
+                  choices = reformen %>% 
+                    distinct(Bundesland) %>% 
+                    add_row(Bundesland = "Alle") %>% 
+                    arrange(Bundesland) %>% 
+                    pull(),
+                  selected = NULL),
       menuItem("Überblick", tabName = "ueberblick"),
       menuItem("Anzahl Reformen", tabName = "anzahl",
                menuSubItem("Nach Partei", tabName = "anzpartei"),
@@ -172,12 +150,59 @@ ui <- dashboardPage(skin = "purple",
 
 server <- function(input, output, session) {
   
+  # reactive input
+  reformen_selected <- reactive({
+    
+    if (input$bundesland_selection == "Alle") {
+      
+      reformen
+      
+    } else {
+      
+      reformen %>% 
+        filter(Bundesland == input$bundesland_selection)
+      
+    }
+    
+    })
+  
+  # Timeline scatterplot base -----------------------------------------------
+  
+  gg_reformen <- reactive({
+    reformen_selected() %>%
+      ggplot(aes(Verabschiedung, .5)) + 
+      geom_vline_interactive(data = timeline, aes(xintercept = datum, tooltip = ereignis),
+                             color = "firebrick", alpha = .5, size = 2) +
+    
+      #geom_text_interactive(data = timeline, aes(x = datum, y = -Inf, label = datum), 
+      #                     show.legend = FALSE, size = 3) +
+      
+      geom_jitter_interactive(aes(data_id = Verabschiedung,
+                                  tooltip = Verabschiedung,
+                                  colour = fct_infreq(partei_legend)),
+                              size = 3) +
+      labs(x = NULL, y = "Anwendungsfreundlichkeit (Fake-Daten)", colour = NULL,
+           title = "Alle Reformen der Volksgesetzgebung in deutschen Bundesländern",
+           subtitle = "(Die Maus über einen der Punkte halten für mehr Details)") +
+      scale_colour_manual_interactive(data_id = reformen$partei_legend %>% 
+                                        fct_infreq() %>% 
+                                        levels() %>% 
+                                        stringi::stri_enc_toutf8(),
+                                      values = c("CDU/CSU/CVP" = "#000000",
+                                                 "FDP" = "#ffe600",
+                                                 "Grüne" = "#187f2b",
+                                                 "parteilos" = "grey",
+                                                 "SPD" = "#ed0020")) +
+      theme_fira() +
+      panel_grid("XxY")
+  })
+    
+  
   # Timeline scatterplot ----
   
   output$timeline <- renderggiraph({
     set.seed(2021)
-    
-    girafe(ggobj = gg_reformen,
+    girafe(ggobj = gg_reformen(),
            width_svg = 10, height_svg = 7,
            options = list(
              opts_hover("stroke-width: 5",
